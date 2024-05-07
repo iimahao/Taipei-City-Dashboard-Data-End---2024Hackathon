@@ -1,6 +1,6 @@
-# <img src='https://github.com/tpe-doit/Taipei-City-Dashboard-Documentation/blob/main/src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard Data-End Documentation
+# <img src='https://github.com/tpe-doit/Taipei-City-Dashboard-Documentation/blob/main/src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard Data-End
 
-[Data-End Docs Website](https://test-tuic.gov.taipei/documentation) [Full-Stack Docs Website](https://tuic.gov.taipei/documentation) | [Taipei City Dashboard GitHub](https://github.com/tpe-doit/Taipei-City-Dashboard)
+[Data-End Docs Website](https://test-tuic.gov.taipei/documentation) | [Full-Stack Docs Website](https://tuic.gov.taipei/documentation) | [Taipei City Dashboard GitHub](https://github.com/tpe-doit/Taipei-City-Dashboard)
 
 ## Taipei Codefest
 
