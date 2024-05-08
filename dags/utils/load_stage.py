@@ -50,11 +50,7 @@ def save_dataframe_to_postgresql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
     elif load_behavior == "replace":
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
+        conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
         data.to_sql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
@@ -63,11 +59,7 @@ def save_dataframe_to_postgresql(
             raise ValueError(
                 "history_table should be provided when load_behavior is `current+history`."
             )
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
+        conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
         data.to_sql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
@@ -78,6 +70,7 @@ def save_dataframe_to_postgresql(
         raise ValueError(
             "load_behavior should be one of `append`, `replace`, `current+history`."
         )
+    conn.commit()
     conn.close()
 
     # print
