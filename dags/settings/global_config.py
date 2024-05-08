@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote
 
 # DAG_PATH is the path of your DAG file, and located by the path of this file.
 # You should make sure this file is in some relative path like "dags/settings/global_config.py"
@@ -21,4 +22,11 @@ else:
 # READY_DATA_DB_URI is the URI of the database where you want to store the data.
 # The format should be like "postgresql://{username}:{password}@{ip}:{port}/{database_name}"
 #   if you use PostgreSQL.
-READY_DATA_DB_URI = "postgresql://{username}:{password}@{ip}:{port}/{database_name}"
+# Please ensure that the settings below match those in the backend Docker YAML.
+# If you make any modifications, update the following settings accordingly.
+USER_NAME = quote("postgres")
+PASSWORD = quote("your_password")  # must be modified
+IP = "localhost"
+PORT = "5433"
+DATABASE_NAME = "dashboard"
+READY_DATA_DB_URI = "postgresql://{USER_NAME}:{PASSWORD}@{IP}:{PORT}/{DATABASE_NAME}"

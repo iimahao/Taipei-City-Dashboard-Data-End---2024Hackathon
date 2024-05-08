@@ -1,10 +1,11 @@
 def generate_sql_to_define_column(
-    col_map, is_add_ogc_fid=True, is_add_mtime=True, is_add_ctime=True
+    table_name, col_map, is_add_ogc_fid=True, is_add_mtime=True, is_add_ctime=True
 ):
     """
     Generate SQL to define columns by converting the input dictionary into SQL text.
 
     Args:
+        table_name (str): The name of the table.
         col_map (dict): A dictionary containing column names as keys and column types as values.
         is_add_ogc_fid (bool): Whether to add the OGC_FID column. Default is True.
         is_add_mtime (bool): Whether to add the MTIME column. Default is True.
@@ -80,6 +81,7 @@ def generate_sql_to_create_db_table(
     sql = ""
 
     col_sql = generate_sql_to_define_column(
+        table_name,
         col_map,
         is_add_mtime=is_add_mtime,
         is_add_ctime=is_add_ctime,
@@ -101,10 +103,8 @@ def generate_sql_to_create_db_table(
     grant_table_sql = f"""
     
     -- grant table
-    ALTER TABLE IF EXISTS public.{table_name} OWNER to dashboard_owner;
-    GRANT ALL ON TABLE public.{table_name} TO dashboard_owner WITH GRANT OPTION;
-    GRANT SELECT ON TABLE public.{table_name} TO dashboard_reader;
-    GRANT ALL ON TABLE public.{table_name} TO dashboard_writer;
+    ALTER TABLE IF EXISTS public.{table_name} OWNER to postgres;
+    GRANT ALL ON TABLE public.{table_name} TO postgres WITH GRANT OPTION;
     """
 
     create_mtime_trigger_sql = f"""
@@ -131,11 +131,8 @@ def generate_sql_to_create_db_table(
     grant_sequnce_sql = f"""
     
     -- grant sequnce
-    ALTER SEQUENCE public.{table_name}_ogc_fid_seq OWNER TO dashboard_owner;
-    GRANT ALL ON SEQUENCE public.{table_name}_ogc_fid_seq TO admin WITH GRANT OPTION;
-    GRANT ALL ON SEQUENCE public.{table_name}_ogc_fid_seq TO dashboard_owner WITH GRANT OPTION;
-    GRANT SELECT ON SEQUENCE public.{table_name}_ogc_fid_seq TO dashboard_reader;
-    GRANT ALL ON SEQUENCE public.{table_name}_ogc_fid_seq TO dashboard_writer;
+    ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to postgres;
+    GRANT ALL ON TABLE public.{table_name}_ogc_fid_seq TO postgres WITH GRANT OPTION;
     """
 
     sql = ""
@@ -226,8 +223,8 @@ if __name__ == "__main__":
     # input
     IS_HISTRORY_TABLE = True
     
-    table_name = "heal_hospital"
-    col_map = {
+    tname = "heal_hospital"
+    column_map = {
         "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
         "name": 'character varying(50) COLLATE pg_catalog."default"',
         "addr": 'text COLLATE pg_catalog."default"',
@@ -237,11 +234,11 @@ if __name__ == "__main__":
     }
 
     if IS_HISTRORY_TABLE:
-        table_name = [table_name, f"{table_name}_history"]
-    
-    for table in table_name:
+        tname = [tname, f"{tname}_history"]
+
+    for table in tname:
         drop_table_sql = generate_sql_to_delete_db_table(table)
         print(drop_table_sql)
 
-        create_table_sql = generate_sql_to_create_db_table(table, col_map)
+        create_table_sql = generate_sql_to_create_db_table(table, column_map)
         print(create_table_sql)
